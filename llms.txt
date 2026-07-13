@@ -7,6 +7,7 @@ This is a personal resume repository. The base resume is the source of truth. Ta
 ## Docs
 
 - [AGENTS.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/AGENTS.md): Full workflow instructions for AI agents — folder structure, tailoring rules, compile steps, commit conventions
+- [CONTRIBUTING.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/CONTRIBUTING.md): Human-facing guide — how to trigger the agent, update the base resume, folder conventions, git commit format
 - [README.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/README.md): Overview and list of available resume variants
 
 ## Base Resume
