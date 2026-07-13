@@ -1,0 +1,19 @@
+# Tushar Pandey — Resume Repository
+
+> LaTeX-based resume system for Tushar Pandey (Software Engineer, Auth/Identity, SDKs). Contains a base resume and role-tailored variants compiled to PDF. Designed for AI-assisted tailoring to job descriptions.
+
+This is a personal resume repository. The base resume is the source of truth. Tailored variants are generated per application and organised by role-type and company.
+
+## Docs
+
+- [AGENTS.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/AGENTS.md): Full workflow instructions for AI agents — folder structure, tailoring rules, compile steps, commit conventions
+- [README.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/README.md): Overview and list of available resume variants
+
+## Base Resume
+
+- [Tushar-Pandey-resume.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/base/Tushar-Pandey-resume.md): Full resume content in Markdown — use as the content library when tailoring
+- [Tushar-Pandey-resume.tex](https://raw.githubusercontent.com/tusharpandey13/resumes/main/base/Tushar-Pandey-resume.tex): Base LaTeX source — copy and modify for each tailored variant
+
+## Optional
+
+- [compile.sh](https://raw.githubusercontent.com/tusharpandey13/resumes/main/compile.sh): Shell script to compile a .tex file to PDF using pdflatex
