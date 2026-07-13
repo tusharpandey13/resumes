@@ -32,6 +32,7 @@ For a tailored variant (e.g. `2026/auth-identity/stripe/`):
 |---------|-----------|-----|
 | base | General | [Tushar-Pandey-resume.pdf](base/Tushar-Pandey-resume.pdf) |
 | 2026/fullstack/insify | Fullstack / Product Eng | [Tushar-Pandey-resume.pdf](2026/fullstack/insify/Tushar-Pandey-resume.pdf) |
+| 2026/distributed-backend/notion | Distributed Backend / Infra | [Tushar-Pandey-resume.pdf](2026/distributed-backend/notion/Tushar-Pandey-resume.pdf) |
 
 ---
 
