@@ -3,7 +3,7 @@
 #
 # Directory model:
 #   Input  (gitignored): applications/<role-type>/<company-slug>/resume.md
-#   Output (tracked):    dist/<role-type>-<NNN>/Tushar-Pandey-resume.pdf
+#   Output (tracked):    dist/<role-type>-<NNN>/<OUTPUT_FILENAME>
 #
 # Usage:
 #   ./scripts/build-resume.sh                          # builds src/resume.md → repo root
@@ -14,6 +14,8 @@
 #     applications/distributed-backend/notion/resume.md \
 #     dist/distributed-backend-001/
 #
+# Output filename is configured in config/build.conf (OUTPUT_FILENAME).
+#
 # Prerequisites: pandoc on PATH, pdflatex at /Library/TeX/texbin/pdflatex
 
 set -e
@@ -21,9 +23,17 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Load config
+CONFIG="$REPO_ROOT/config/build.conf"
+if [ -f "$CONFIG" ]; then
+  # shellcheck source=../config/build.conf
+  source "$CONFIG"
+fi
+OUTPUT_FILENAME="${OUTPUT_FILENAME:-Tushar-Pandey-resume.pdf}"
+
 SRC="${1:-"$REPO_ROOT/src/resume.md"}"
 OUTDIR="${2:-"$REPO_ROOT"}"
-OUTFILE="$OUTDIR/Tushar-Pandey-resume.pdf"
+OUTFILE="$OUTDIR/$OUTPUT_FILENAME"
 
 TEMPLATE="$REPO_ROOT/templates/resume-template.tex"
 FILTER="$REPO_ROOT/filters/resume.lua"
