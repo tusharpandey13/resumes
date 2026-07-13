@@ -1,6 +1,6 @@
 # Tushar Pandey — Resumes
 
-Tailored resume variants for job applications. Base resume in LaTeX + Markdown; compiled to PDF per role.
+Tailored resume variants for job applications. Markdown source compiled to PDF via Pandoc. Designed for AI-assisted tailoring to job descriptions.
 
 &copy; Tushar Pandey. All rights reserved. Content may not be reproduced or adapted without permission.
 
@@ -16,10 +16,10 @@ Edit `src/resume.md`, then run from repo root:
 
 Output: `Tushar-Pandey-resume.pdf` in repo root.
 
-For a tailored variant (e.g. `2026/auth-identity/stripe/`):
+For a tailored variant:
 
 ```bash
-./scripts/build-resume.sh src/resume.md 2026/auth-identity/stripe/
+./scripts/build-resume.sh 2026/<role-type>/<company-slug>/resume.md 2026/<role-type>/<company-slug>/
 ```
 
 **Prerequisites:** `pandoc` (`brew install pandoc`) + BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`).
@@ -38,9 +38,5 @@ For a tailored variant (e.g. `2026/auth-identity/stripe/`):
 
 ## Workflow
 
-See [AGENTS.md](AGENTS.md) for the full tailoring workflow.
-
-**Compile a variant manually:**
-```
-./compile.sh path/to/Tushar-Pandey-resume.tex
-```
+See [AGENTS.md](AGENTS.md) for the full tailoring workflow and Markdown source conventions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the human-facing guide.

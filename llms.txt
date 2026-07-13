@@ -1,20 +1,24 @@
 # Tushar Pandey — Resume Repository
 
-> LaTeX-based resume system for Tushar Pandey (Software Engineer, Auth/Identity, SDKs). Contains a base resume and role-tailored variants compiled to PDF. Designed for AI-assisted tailoring to job descriptions.
+> Markdown-to-PDF resume system for Tushar Pandey (Software Engineer, Auth/Identity, Distributed Systems). Markdown source compiled via Pandoc + LaTeX. Designed for AI-assisted tailoring to job descriptions.
 
-This is a personal resume repository. The base resume is the source of truth. Tailored variants are generated per application and organised by role-type and company.
+This is a personal resume repository. `src/resume.md` is the active Pandoc source. `base/Tushar-Pandey-resume.md` is the full content library. Tailored variants are generated per application and organised by role-type and company under `2026/`.
 
 ## Docs
 
-- [AGENTS.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/AGENTS.md): Full workflow instructions for AI agents — folder structure, tailoring rules, compile steps, commit conventions
+- [AGENTS.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/AGENTS.md): Full workflow instructions for AI agents — folder structure, tailoring rules, Markdown conventions, compile steps, commit conventions
 - [CONTRIBUTING.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/CONTRIBUTING.md): Human-facing guide — how to trigger the agent, update the base resume, folder conventions, git commit format
 - [README.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/README.md): Overview and list of available resume variants
 
-## Base Resume
+## Source Files
 
-- [Tushar-Pandey-resume.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/base/Tushar-Pandey-resume.md): Full resume content in Markdown — use as the content library when tailoring
-- [Tushar-Pandey-resume.tex](https://raw.githubusercontent.com/tusharpandey13/resumes/main/base/Tushar-Pandey-resume.tex): Base LaTeX source — copy and modify for each tailored variant
+- [src/resume.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/src/resume.md): Active Pandoc Markdown source — start here when tailoring
+- [base/Tushar-Pandey-resume.md](https://raw.githubusercontent.com/tusharpandey13/resumes/main/base/Tushar-Pandey-resume.md): Full content library — pull extra detail from here
+- [base/Tushar-Pandey-resume.tex](https://raw.githubusercontent.com/tusharpandey13/resumes/main/base/Tushar-Pandey-resume.tex): Legacy LaTeX source — reference only, do not modify
 
-## Optional
+## Pipeline
 
-- [compile.sh](https://raw.githubusercontent.com/tusharpandey13/resumes/main/compile.sh): Shell script to compile a .tex file to PDF using pdflatex
+- [templates/resume-template.tex](https://raw.githubusercontent.com/tusharpandey13/resumes/main/templates/resume-template.tex): Pandoc LaTeX template (preamble + `$body$`)
+- [filters/resume.lua](https://raw.githubusercontent.com/tusharpandey13/resumes/main/filters/resume.lua): Pandoc Lua filter — maps Markdown AST to custom LaTeX resume commands
+- [scripts/build-resume.sh](https://raw.githubusercontent.com/tusharpandey13/resumes/main/scripts/build-resume.sh): Primary build script — `pandoc --lua-filter --pdf-engine=pdflatex`
+- [compile.sh](https://raw.githubusercontent.com/tusharpandey13/resumes/main/compile.sh): Legacy pdflatex script (still functional)

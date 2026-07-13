@@ -12,3 +12,13 @@
 # Compiled PDFs (tracked explicitly per variant)
 # Uncomment the line below to exclude all PDFs
 # *.pdf
+
+# macOS
+.DS_Store
+
+# Raven / agent workflow artifacts (dev scaffolding, not content)
+stories/
+WORKFLOW_STATE.md
+project-context.md
+VERIFY.md
+

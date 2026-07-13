@@ -19,9 +19,8 @@ Trigger the agent (OpenCode, Claude, etc.) with:
 
 The agent will:
 - Determine the role-type and company slug
-- Create `2026/<role-type>/<company-slug>/Tushar-Pandey-resume.tex`
-- Tailor the content to the JD (reorder bullets, rewrite summary, adjust skills order)
-- Compile to PDF
+- Create `2026/<role-type>/<company-slug>/resume.md` tailored to the JD
+- Compile to PDF via the Pandoc pipeline
 - Update the variants table in `README.md`
 - Commit and push
 
@@ -33,27 +32,28 @@ See [AGENTS.md](AGENTS.md) for the exact rules and steps the agent follows.
 
 When your experience, skills, or projects change:
 
-1. Edit `base/Tushar-Pandey-resume.md` — this is the full content library
-2. Edit `base/Tushar-Pandey-resume.tex` — this is the formatted LaTeX source
+1. Edit `src/resume.md` — this is the Pandoc source compiled to PDF
+2. Also edit `base/Tushar-Pandey-resume.md` — the full content library (may have more detail)
 3. Recompile:
    ```
-   ./compile.sh base/Tushar-Pandey-resume.tex
+   ./scripts/build-resume.sh
    ```
 4. Commit:
    ```
-   git add base/
+   git add src/ base/ Tushar-Pandey-resume.pdf
    git commit -m "base: <what changed>"
    git push
    ```
 
-Keep `.md` and `.tex` in sync — the `.md` can have more detail (it's a content library), but anything in `.tex` should also be in `.md`.
+Keep `src/resume.md` and `base/Tushar-Pandey-resume.md` in sync. The `base/` file can carry extra detail not on the active resume; `src/resume.md` is what actually compiles.
 
 ---
 
 ## Folder & File Conventions
 
 ```
-2026/<role-type>/<company-slug>/Tushar-Pandey-resume.{tex,pdf}
+2026/<role-type>/<company-slug>/resume.md          # Markdown source (tailored)
+2026/<role-type>/<company-slug>/Tushar-Pandey-resume.pdf
 ```
 
 **Role-type slugs:**
@@ -74,25 +74,27 @@ If a JD doesn't fit cleanly, use the dominant technical area as the slug (lowerc
 
 ## Keeping the Index Files Updated
 
-After adding a variant, two files must be updated:
-
-**`README.md`** — add a row to the variants table:
+After adding a variant, update `README.md` — add a row to the variants table:
 ```markdown
 | 2026/auth-identity/stripe | Auth, Identity | [PDF](2026/auth-identity/stripe/Tushar-Pandey-resume.pdf) |
 ```
-
-**`llms.txt`** — no per-variant updates needed; it describes repo structure, not individual files.
 
 ---
 
 ## Compile Reference
 
 ```bash
-# Compile any .tex to PDF in the same directory
+# Build base resume (Pandoc pipeline — primary)
+./scripts/build-resume.sh
+
+# Build a tailored variant
+./scripts/build-resume.sh 2026/<role-type>/<company-slug>/resume.md 2026/<role-type>/<company-slug>/
+
+# Legacy: compile a .tex file directly (pdflatex)
 ./compile.sh path/to/Tushar-Pandey-resume.tex
 ```
 
-Requires BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`). Runs two passes for cross-references, cleans aux files automatically.
+**Pandoc pipeline prerequisites:** `pandoc` (`brew install pandoc`) + BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`).
 
 ---
 
@@ -103,3 +105,4 @@ Requires BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`). Runs two passe
 | New tailored variant | `resume: <role-type>/<company-slug>` |
 | Base resume update | `base: <what changed>` |
 | Docs/structure change | `docs: <what changed>` |
+| Pipeline/infra change | `infra: <what changed>` |
