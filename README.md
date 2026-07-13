@@ -1,42 +1,146 @@
-# Tushar Pandey — Resumes
+# Resume Pipeline
 
-Tailored resume variants for job applications. Markdown source compiled to PDF via Pandoc. Designed for AI-assisted tailoring to job descriptions.
+A Markdown-to-PDF resume system with AI-assisted tailoring. Write your resume once in Markdown, compile to a pixel-perfect PDF with one command, and let an AI agent tailor it to any job description — automatically.
 
 &copy; Tushar Pandey. All rights reserved. Content may not be reproduced or adapted without permission.
 
 ---
 
-## Pandoc Pipeline (Markdown → PDF)
+## What this is
 
-Edit `src/resume.md`, then run from repo root:
+Most resume workflows force a tradeoff: LaTeX gives beautiful output but is hostile to quick edits. Word processors are easy to edit but produce inconsistent results. Markdown-based tools are clean to write but lose typographic control at the PDF stage.
+
+This repo threads that needle. The source of truth is a plain Markdown file (`src/resume.md`). A Pandoc Lua filter translates its structure into custom LaTeX resume commands — `\resumeSubheading`, `\resumeProjectHeading`, `\resumeItemListStart` — preserving the exact spacing, font sizing, and layout of a hand-crafted LaTeX resume. You never touch a `.tex` file to update your experience.
+
+The second layer is an AI agent workflow. Drop a job description in, get a tailored PDF out. The agent reads the JD, reorders bullets to front-load what the role values, rewrites the profile summary, adjusts the skills section, compiles the PDF, and commits — without inventing anything that isn't already in your base resume.
+
+---
+
+## How it works
+
+### The pipeline
+
+```
+src/resume.md
+    │
+    ▼  pandoc --lua-filter filters/resume.lua
+    │         --template templates/resume-template.tex
+    │         --pdf-engine=pdflatex
+    ▼
+Tushar-Pandey-resume.pdf
+```
+
+**`src/resume.md`** — the only file you edit. Plain Markdown with a small set of structural conventions the Lua filter understands (see below).
+
+**`filters/resume.lua`** — a Pandoc Lua filter that walks the Markdown AST and emits custom LaTeX commands. It maps:
+- H1 + contact paragraph → `\begin{center}` heading block
+- H2 → `\section{}` (with titlesec formatting)
+- H3 + italic subline → `\resumeSubheading{company}{date}{role}{location}`
+- H3 with bold name + italic tech → `\resumeProjectHeading{\textbf{name} $|$ \emph{tech}}{}`
+- Bullet lists → `\resumeItemListStart` / `\resumeItemListEnd` with `\resumeItem{}`
+- Profile Summary and Technical Skills sections → their respective `itemize` environments
+
+**`templates/resume-template.tex`** — a Pandoc LaTeX template containing the full preamble (packages, margins, custom commands) from the original LaTeX source. The body is just `$body$` — Pandoc fills it in.
+
+**`scripts/build-resume.sh`** — wraps the full `pandoc` invocation with prereq checks and sensible defaults.
+
+### The Markdown conventions
+
+The filter relies on a small set of structural patterns. These are the only things you need to know to write or edit the source:
+
+```markdown
+# Full Name
+phone | email | [linkedin](url) | [github](url)
+
+## Experience
+
+### Role Title | Company Name | Date Range
+_Team or product description | City, Country_
+
+- **Bullet heading**: detail detail detail.
+- **Another bullet**: detail detail detail.
+
+## Key Projects
+
+### **Project Name** | _Tech Stack_
+
+- What it does and why it matters.
+
+## Technical Skills
+
+- **Category**: item, item, item
+```
+
+The only non-obvious rule: the **last** ` | ` in an H3 line is the date separator. This means company names that contain ` | ` (e.g. `Auth0 (Okta)` displayed as `Role | Auth0 (Okta) | Date`) work correctly without any escaping.
+
+### Building
 
 ```bash
+# Prerequisites
+brew install pandoc
+# BasicTeX: https://tug.org/mactex/morepackages.html
+
+# Build base resume → Tushar-Pandey-resume.pdf in repo root
 ./scripts/build-resume.sh
+
+# Build a tailored variant into a specific output directory
+./scripts/build-resume.sh path/to/tailored/resume.md path/to/output/
 ```
-
-Output: `Tushar-Pandey-resume.pdf` in repo root.
-
-For a tailored variant:
-
-```bash
-./scripts/build-resume.sh 2026/<role-type>/<company-slug>/resume.md 2026/<role-type>/<company-slug>/
-```
-
-**Prerequisites:** `pandoc` (`brew install pandoc`) + BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`).
 
 ---
 
-## Available Variants
+## AI-assisted tailoring
 
-| Variant | Role Type | PDF |
-|---------|-----------|-----|
-| base | General | [Tushar-Pandey-resume.pdf](base/Tushar-Pandey-resume.pdf) |
-| 2026/fullstack/insify | Fullstack / Product Eng | [Tushar-Pandey-resume.pdf](2026/fullstack/insify/Tushar-Pandey-resume.pdf) |
-| 2026/distributed-backend/notion | Distributed Backend / Infra | [Tushar-Pandey-resume.pdf](2026/distributed-backend/notion/Tushar-Pandey-resume.pdf) |
+The real leverage comes from pairing this pipeline with an AI agent. The workflow:
+
+1. **Paste a job description** into a conversation with the agent (OpenCode, Claude, etc.)
+2. The agent reads the JD and identifies what the role values most — specific technologies, system properties, team structures
+3. It starts from `src/resume.md` and produces a tailored variant:
+   - Rewrites the profile summary to speak directly to the role
+   - Reorders bullets within each job to front-load the most relevant work
+   - Adjusts the Technical Skills section to lead with what the JD emphasizes
+   - Pulls in extra detail from `base/Tushar-Pandey-resume.md` (the full content library) where relevant
+4. Compiles with `./scripts/build-resume.sh`
+5. Verifies the PDF output
+
+**The constraint that makes this safe:** the agent never fabricates. Every bullet, metric, and technology in the output must exist in the base resume. Tailoring means reordering and reframing — not inventing.
+
+### Privacy model
+
+Tailored variants (the actual company-specific files) are gitignored and stay local. The repo publishes the pipeline — the template, filter, build script, and base content. What you applied to, and when, never leaves your machine. A local `APPLICATIONS.md` (also gitignored) serves as a private index.
 
 ---
 
-## Workflow
+## Base resume
 
-See [AGENTS.md](AGENTS.md) for the full tailoring workflow and Markdown source conventions.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the human-facing guide.
+| Version | PDF |
+|---------|-----|
+| Base (general) | [PDF Link](base/Tushar-Pandey-resume.pdf) |
+
+---
+
+## Repo structure
+
+```
+├── src/
+│   └── resume.md              # Edit this — Pandoc Markdown source
+├── base/
+│   ├── Tushar-Pandey-resume.md   # Full content library (more detail than src/)
+│   ├── Tushar-Pandey-resume.tex  # Original LaTeX (reference, do not modify)
+│   └── Tushar-Pandey-resume.pdf  # Compiled base PDF
+├── templates/
+│   └── resume-template.tex    # Pandoc LaTeX template
+├── filters/
+│   └── resume.lua             # Pandoc Lua filter (AST → LaTeX commands)
+├── scripts/
+│   └── build-resume.sh        # Build script
+├── .raven/                    # Agent workflow artifacts (project context, stories)
+└── compile.sh                 # Legacy pdflatex script (still functional)
+```
+
+---
+
+## See also
+
+- [AGENTS.md](AGENTS.md) — full agent instructions: tailoring rules, Markdown conventions, commit format
+- [CONTRIBUTING.md](CONTRIBUTING.md) — human-facing guide: editing the base resume, running builds, updating the index

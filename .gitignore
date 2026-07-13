@@ -16,3 +16,7 @@
 # macOS
 .DS_Store
 
+# Tailored variants — kept local, never published (privacy: hides company names)
+2026/
+APPLICATIONS.md
+
