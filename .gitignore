@@ -16,7 +16,10 @@
 # macOS
 .DS_Store
 
-# Tailored variants — kept local, never published (privacy: hides company names)
+# Input variants — gitignored (contains company slugs in dir names)
+applications/
 2026/
+
+# Local application index — never published
 APPLICATIONS.md
 

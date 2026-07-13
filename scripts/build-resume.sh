@@ -1,7 +1,18 @@
 #!/bin/bash
 # build-resume.sh — Pandoc Markdown → PDF pipeline
-# Usage: ./scripts/build-resume.sh [src.md] [output-dir]
-# Defaults: src=src/resume.md  output-dir=. (repo root)
+#
+# Directory model:
+#   Input  (gitignored): applications/<role-type>/<company-slug>/resume.md
+#   Output (tracked):    dist/<role-type>-<NNN>/Tushar-Pandey-resume.pdf
+#
+# Usage:
+#   ./scripts/build-resume.sh                          # builds src/resume.md → repo root
+#   ./scripts/build-resume.sh <src.md> <output-dir>   # builds src into output-dir
+#
+# Examples:
+#   ./scripts/build-resume.sh \
+#     applications/distributed-backend/notion/resume.md \
+#     dist/distributed-backend-001/
 #
 # Prerequisites: pandoc on PATH, pdflatex at /Library/TeX/texbin/pdflatex
 

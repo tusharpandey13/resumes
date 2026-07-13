@@ -12,7 +12,7 @@ Most resume workflows force a tradeoff: LaTeX gives beautiful output but is host
 
 This repo threads that needle. The source of truth is a plain Markdown file (`src/resume.md`). A Pandoc Lua filter translates its structure into custom LaTeX resume commands — `\resumeSubheading`, `\resumeProjectHeading`, `\resumeItemListStart` — preserving the exact spacing, font sizing, and layout of a hand-crafted LaTeX resume. You never touch a `.tex` file to update your experience.
 
-The second layer is an AI agent workflow. Drop a job description in, get a tailored PDF out. The agent reads the JD, reorders bullets to front-load what the role values, rewrites the profile summary, adjusts the skills section, compiles the PDF, and commits — without inventing anything that isn't already in your base resume.
+The second layer is an AI agent workflow. Drop a job description in, get a tailored PDF out. The agent reads the JD, reorders bullets to front-load what the role values, rewrites the profile summary, adjusts the skills section, and compiles the PDF — without inventing anything that isn't already in your base resume.
 
 ---
 
@@ -71,7 +71,7 @@ _Team or product description | City, Country_
 - **Category**: item, item, item
 ```
 
-The only non-obvious rule: the **last** ` | ` in an H3 line is the date separator. This means company names that contain ` | ` (e.g. `Auth0 (Okta)` displayed as `Role | Auth0 (Okta) | Date`) work correctly without any escaping.
+The only non-obvious rule: the **last** ` | ` in an H3 line is the date separator. This means company names that contain ` | ` (e.g. `Role | Auth0 (Okta) | Date`) work correctly without any escaping.
 
 ### Building
 
@@ -83,8 +83,10 @@ brew install pandoc
 # Build base resume → Tushar-Pandey-resume.pdf in repo root
 ./scripts/build-resume.sh
 
-# Build a tailored variant into a specific output directory
-./scripts/build-resume.sh path/to/tailored/resume.md path/to/output/
+# Build a tailored variant (input → dist)
+./scripts/build-resume.sh \
+  applications/<role-type>/<company-slug>/resume.md \
+  dist/<role-type>-<NNN>/
 ```
 
 ---
@@ -100,22 +102,34 @@ The real leverage comes from pairing this pipeline with an AI agent. The workflo
    - Reorders bullets within each job to front-load the most relevant work
    - Adjusts the Technical Skills section to lead with what the JD emphasizes
    - Pulls in extra detail from `base/Tushar-Pandey-resume.md` (the full content library) where relevant
-4. Compiles with `./scripts/build-resume.sh`
-5. Verifies the PDF output
+4. Compiles to `dist/<role-type>-<NNN>/Tushar-Pandey-resume.pdf`
+5. Updates `README.md` and pushes
 
 **The constraint that makes this safe:** the agent never fabricates. Every bullet, metric, and technology in the output must exist in the base resume. Tailoring means reordering and reframing — not inventing.
 
 ### Privacy model
 
-Tailored variants (the actual company-specific files) are gitignored and stay local. The repo publishes the pipeline — the template, filter, build script, and base content. What you applied to, and when, never leaves your machine. A local `APPLICATIONS.md` (also gitignored) serves as a private index.
+Input and output directories are decoupled:
+
+- **`applications/`** (gitignored) — company-slug directory names, full Markdown source, intermediate PDFs. Stays on your machine.
+- **`dist/`** (tracked) — final PDFs only, named with opaque role-type IDs (`distributed-backend-001`). No company names anywhere in the pushed output.
+- **`APPLICATIONS.md`** (gitignored) — local index mapping IDs to companies, roles, and status.
+
+What gets pushed is a PDF behind an opaque ID. What you applied to, and when, never leaves your machine.
 
 ---
 
 ## Base resume
 
-| Version | PDF |
-|---------|-----|
-| Base (general) | [PDF Link](base/Tushar-Pandey-resume.pdf) |
+| Version | Role Type | PDF |
+|---------|-----------|-----|
+| base | General | [PDF Link](base/Tushar-Pandey-resume.pdf) |
+
+## Tailored variants
+
+| ID | Role Type | PDF |
+|----|-----------|-----|
+| distributed-backend-001 | Distributed Backend / Infra | [PDF Link](dist/distributed-backend-001/Tushar-Pandey-resume.pdf) |
 
 ---
 
@@ -134,6 +148,13 @@ Tailored variants (the actual company-specific files) are gitignored and stay lo
 │   └── resume.lua             # Pandoc Lua filter (AST → LaTeX commands)
 ├── scripts/
 │   └── build-resume.sh        # Build script
+├── dist/                      # Tracked — published PDFs, opaque IDs
+│   └── <role-type>-<NNN>/
+│       └── Tushar-Pandey-resume.pdf
+├── applications/              # Gitignored — local input, company slugs
+│   └── <role-type>/<company-slug>/
+│       ├── resume.md
+│       └── Tushar-Pandey-resume.pdf
 ├── .raven/                    # Agent workflow artifacts (project context, stories)
 └── compile.sh                 # Legacy pdflatex script (still functional)
 ```
@@ -142,5 +163,5 @@ Tailored variants (the actual company-specific files) are gitignored and stay lo
 
 ## See also
 
-- [AGENTS.md](AGENTS.md) — full agent instructions: tailoring rules, Markdown conventions, commit format
-- [CONTRIBUTING.md](CONTRIBUTING.md) — human-facing guide: editing the base resume, running builds, updating the index
+- [AGENTS.md](AGENTS.md) — full agent instructions: tailoring workflow, directory model, Markdown conventions
+- [CONTRIBUTING.md](CONTRIBUTING.md) — human-facing guide: editing the base resume, compile reference, index format

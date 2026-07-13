@@ -14,15 +14,19 @@ This is a personal resume repository for Tushar Pandey. "Contributing" here mean
 Trigger the agent (OpenCode, Claude, etc.) with:
 
 1. **The job description** — paste the full JD
-2. **The company name** — used for the folder slug
+2. **The company name** — used for the local input folder slug
 3. **Any extra context** — seniority level, team focus, anything not obvious from the JD
 
 The agent will:
-- Determine the role-type and company slug
-- Create `2026/<role-type>/<company-slug>/resume.md` tailored to the JD
-- Compile to PDF via the Pandoc pipeline
+- Determine the role-type and assign the next dist ID (e.g. `distributed-backend-002`)
+- Create `applications/<role-type>/<company-slug>/resume.md` (gitignored, local only)
+- Tailor the content to the JD
+- Compile: `dist/<role-type>-<NNN>/Tushar-Pandey-resume.pdf` (tracked, pushed)
+- Update `APPLICATIONS.md` (gitignored local index)
 - Update the variants table in `README.md`
 - Commit and push
+
+Only `dist/` and `README.md` are ever committed. Company names stay local.
 
 See [AGENTS.md](AGENTS.md) for the exact rules and steps the agent follows.
 
@@ -33,27 +37,26 @@ See [AGENTS.md](AGENTS.md) for the exact rules and steps the agent follows.
 When your experience, skills, or projects change:
 
 1. Edit `src/resume.md` — this is the Pandoc source compiled to PDF
-2. Also edit `base/Tushar-Pandey-resume.md` — the full content library (may have more detail)
+2. Also edit `base/Tushar-Pandey-resume.md` — the full content library
 3. Recompile:
-   ```
+   ```bash
    ./scripts/build-resume.sh
    ```
 4. Commit:
-   ```
+   ```bash
    git add src/ base/ Tushar-Pandey-resume.pdf
    git commit -m "base: <what changed>"
    git push
    ```
-
-Keep `src/resume.md` and `base/Tushar-Pandey-resume.md` in sync. The `base/` file can carry extra detail not on the active resume; `src/resume.md` is what actually compiles.
 
 ---
 
 ## Folder & File Conventions
 
 ```
-2026/<role-type>/<company-slug>/resume.md          # Markdown source (tailored)
-2026/<role-type>/<company-slug>/Tushar-Pandey-resume.pdf
+applications/<role-type>/<company-slug>/resume.md          # local input (gitignored)
+applications/<role-type>/<company-slug>/Tushar-Pandey-resume.pdf
+dist/<role-type>-<NNN>/Tushar-Pandey-resume.pdf            # published output
 ```
 
 **Role-type slugs:**
@@ -66,17 +69,19 @@ Keep `src/resume.md` and `base/Tushar-Pandey-resume.md` in sync. The `base/` fil
 | `fullstack` | frontend + backend product work |
 | `staff-eng` | staff/principal, architecture, cross-team |
 
-If a JD doesn't fit cleanly, use the dominant technical area as the slug (lowercase, hyphenated).
+**Company slugs:** lowercase, hyphenated, no punctuation — e.g. `stripe`, `cloudflare`, `morgan-stanley`. Used only in `applications/` paths and `APPLICATIONS.md`, never pushed.
 
-**Company slugs:** lowercase, hyphenated, no punctuation — e.g. `stripe`, `cloudflare`, `morgan-stanley`.
+**Dist IDs:** `<role-type>-<NNN>` — zero-padded 3-digit counter per role type. Read `dist/` to find the next available number.
 
 ---
 
-## Keeping the Index Files Updated
+## APPLICATIONS.md — Local Index
 
-After adding a variant, update `README.md` — add a row to the variants table:
-```markdown
-| 2026/auth-identity/stripe | Auth, Identity | [PDF](2026/auth-identity/stripe/Tushar-Pandey-resume.pdf) |
+`APPLICATIONS.md` is gitignored. It maps dist IDs to companies and tracks status:
+
+```
+distributed-backend-001 | distributed-backend | Notion  | SWE Infrastructure | applied | 2026-07-13
+auth-identity-001       | auth-identity       | Stripe  | SWE Auth           | pending | 2026-07-15
 ```
 
 ---
@@ -84,17 +89,19 @@ After adding a variant, update `README.md` — add a row to the variants table:
 ## Compile Reference
 
 ```bash
-# Build base resume (Pandoc pipeline — primary)
+# Build base resume
 ./scripts/build-resume.sh
 
-# Build a tailored variant
-./scripts/build-resume.sh 2026/<role-type>/<company-slug>/resume.md 2026/<role-type>/<company-slug>/
+# Build a tailored variant (input → dist)
+./scripts/build-resume.sh \
+  applications/<role-type>/<company-slug>/resume.md \
+  dist/<role-type>-<NNN>/
 
-# Legacy: compile a .tex file directly (pdflatex)
+# Legacy: compile a .tex file directly
 ./compile.sh path/to/Tushar-Pandey-resume.tex
 ```
 
-**Pandoc pipeline prerequisites:** `pandoc` (`brew install pandoc`) + BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`).
+**Prerequisites:** `pandoc` (`brew install pandoc`) + BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`).
 
 ---
 
@@ -102,7 +109,9 @@ After adding a variant, update `README.md` — add a row to the variants table:
 
 | Change | Commit message |
 |--------|---------------|
-| New tailored variant | `resume: <role-type>/<company-slug>` |
+| New tailored variant | `resume: <role-type>-<NNN>` |
 | Base resume update | `base: <what changed>` |
 | Docs/structure change | `docs: <what changed>` |
 | Pipeline/infra change | `infra: <what changed>` |
+
+Only ever stage `dist/<role-type>-<NNN>/` and `README.md` for resume variant commits.
