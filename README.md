@@ -11,6 +11,7 @@ Tailored resume variants for job applications. Base resume in LaTeX + Markdown; 
 | Variant | Role Type | PDF |
 |---------|-----------|-----|
 | base | General | [Tushar-Pandey-resume.pdf](base/Tushar-Pandey-resume.pdf) |
+| 2026/fullstack/insify | Fullstack / Product Eng | [Tushar-Pandey-resume.pdf](2026/fullstack/insify/Tushar-Pandey-resume.pdf) |
 
 ---
 
