@@ -6,6 +6,26 @@ Tailored resume variants for job applications. Base resume in LaTeX + Markdown; 
 
 ---
 
+## Pandoc Pipeline (Markdown → PDF)
+
+Edit `src/resume.md`, then run from repo root:
+
+```bash
+./scripts/build-resume.sh
+```
+
+Output: `Tushar-Pandey-resume.pdf` in repo root.
+
+For a tailored variant (e.g. `2026/auth-identity/stripe/`):
+
+```bash
+./scripts/build-resume.sh src/resume.md 2026/auth-identity/stripe/
+```
+
+**Prerequisites:** `pandoc` (`brew install pandoc`) + BasicTeX (`pdflatex` at `/Library/TeX/texbin/pdflatex`).
+
+---
+
 ## Available Variants
 
 | Variant | Role Type | PDF |
