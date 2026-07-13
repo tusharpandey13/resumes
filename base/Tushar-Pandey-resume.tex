@@ -1,0 +1,179 @@
+%-------------------------
+% Resume in Latex
+% Author : Tushar Pandey
+% Based off of: https://github.com/sb2nov/resume
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+\setlength{\footskip}{5pt}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+{#1 \vspace{-1pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+  \textbf{#1} & #2 \\
+  \textit{\small#3} & \textit{\small #4} \\
+\end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+\item
+\begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+  \textit{\small#1} & \textit{\small #2} \\
+\end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+\item
+\begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+  \small#1 & #2 \\
+\end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-2pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+\textbf{\Huge \scshape Tushar Pandey} \\ \vspace{4pt}
+\small +919380611436 $|$ \href{mailto:tusharpandey13@gmail.com}{\underline{tusharpandey13@gmail.com}} $|$
+\href{https://www.linkedin.com/in/tusharpandey13/}{\underline{linkedin.com/in/tusharpandey13}} $|$
+\href{https://github.com/tusharpandey13}{\underline{github.com/tusharpandey13}}
+\end{center}
+
+%-----------PROFILE SUMMARY-----------
+\section{Profile Summary}
+\begin{itemize}[leftmargin=0.15in, label={}]
+\resumeItem{Software Engineer with \textbf{4+ years} building \textbf{identity and authentication infrastructure}. Primary maintainer of open-source SDKs with \textbf{21M+ monthly installs}. Shipped security-critical features across \textbf{11 repositories}, released \textbf{31 SDK versions}, and built a \textbf{new SDK from scratch}. Previously scaled token services to \textbf{4,000 TPS} for \textbf{40M+ users} at ZEE5.}
+\end{itemize}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+  {Software Development Engineer 2, Authn-SDKs | Auth0 (Okta)}{July 2024 -- Present}
+  {Primary maintainer of nextjs-auth0 (21M+ monthly downloads, 141\% growth in tenure)}{Bangalore, India}
+  \resumeItemListStart
+    \resumeItem{\textbf{Multi-Factor Auth (MFA)}: Shipped full MFA step-up support for Next.js SDK. Users can now challenge, verify, and enroll factors natively. First server-side Auth0 SDK with this capability. Design to production in 5 weeks.}
+    \resumeItem{\textbf{Multi-Domain Support}: Rewired SDK from single-domain to dynamic per-request domain resolution. Customers with multiple brands now use one SDK instance. Zero breaking changes, sessions auto-migrate.}
+    \resumeItem{\textbf{New SDK (auth0-hono)}: Built and shipped a new authentication SDK for the Hono framework. 8,100+ lines of code, 291 tests, runs on Node, Cloudflare Workers, Deno, and Bun. Gap analysis to shipping in 4 weeks.}
+    \resumeItem{\textbf{Cross-SDK Features}: Delivered DPoP (proof-of-possession tokens), token exchange, and organization-scoped auth across Next.js, SPA, and Node SDKs. Cut 31 releases across 3 packages in 16 months.}
+    \resumeItem{\textbf{Security}: Patched critical Next.js cache poisoning vulnerability (affected all Next.js users globally) across Auth0 SDK ecosystem. Owned and resolved auth parameter injection bugs and coordinated fixes with security team.}
+    \resumeItem{\textbf{Technical Direction}: Authored 15+ design docs adopted across teams. Proposed and got approval for 10+ architecture decisions in cross-team reviews. Unblocked stalled features by building working prototypes instead of writing longer docs.}
+  \resumeItemListEnd
+
+    \resumeSubheading
+  {Software Development Engineer 1, B2B-Subscriptions | ZEE5}{August 2022 -- July 2024}
+  {Scaling video streaming platform for 65M+ monthly active users}{Bangalore, India}
+  \resumeItemListStart
+    \resumeItem{\textbf{Mirage}: Built high-throughput token exchange service handling 4,000 requests/sec, powering cross-platform streaming for 40M+ B2B users (60\% of ZEE5's revenue base).}
+    \resumeItem{\textbf{Cloud Migration}: Led zero-downtime AWS to GCP migration including PostgreSQL to Cloud Spanner for 5M+ daily auth events. Cut DB latency to under 10ms.}
+    \resumeItem{\textbf{Subscription Engine}: Built async subscription orchestrator with automatic failover. Hit 99.9\% uptime on revenue-critical B2B flows while cutting cloud spend.}
+    \resumeItem{\textbf{Platform Rewrite}: Moved Node.js services to Java WebFlux. 10x throughput, zero regressions, zero customer-facing downtime.}
+  \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------KEY PROJECTS-----------
+\section{Key Projects}
+\resumeSubHeadingListStart
+
+\resumeProjectHeading
+    {\textbf{Forge: AI Development Workflow Engine} $|$ \emph{Claude Code, TypeScript, State Machines}}{}
+\resumeItemListStart
+  \resumeItem{Built a multi-phase AI orchestrator that automates the full software lifecycle: requirements, design, implementation, review, and documentation.}
+  \resumeItem{Used to ship two major SDK features (MFA and Multi-Domain). Adopted by team for AI-assisted development.}
+\resumeItemListEnd
+
+\resumeProjectHeading
+    {\textbf{LightRAW: AI-Powered Photo Editing Pipeline} $|$ \emph{Claude Code, RawTherapee, Git, Batch Processing}}{}
+\resumeItemListStart
+  \resumeItem{Prompt-driven RAW photo editing system: describe edits in plain English, apply across hundreds of files automatically.}
+  \resumeItem{Replaces complex multi-tool workflows (exposure, color grading, noise reduction) with a single conversational interface backed by professional-grade RAW processors.}
+\resumeItemListEnd
+
+\resumeProjectHeading
+    {\textbf{OPAL: Real-time Log Analytics (Auth0 Hackathon Finalist)} $|$ \emph{ClickHouse, S3, Benthos, Cube.js}}{}
+\resumeItemListStart
+  \resumeItem{Built analytics engine ingesting \textbf{13k events/sec} for customer usage insights. Estimated \textbf{\$70k/month savings} over existing solution.}
+  \resumeItem{Column-oriented storage with 130:1 write-read efficiency. Live dashboards and log search integrated into product.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+    \resumeItem{\textbf{Languages}: TypeScript, Java, Python, Go, Rust (learning)}
+    \resumeItem{\textbf{Auth/Identity}: OAuth 2.0/2.1, OIDC, DPoP, MFA, PKCE, Token Exchange, Session Management}
+    \resumeItem{\textbf{Frameworks}: Next.js, React, Hono, Node.js, Spring WebFlux, Vitest}
+    \resumeItem{\textbf{Infrastructure}: ClickHouse, PostgreSQL, Cloud Spanner, Redis, Kafka, Cloudflare Workers, Docker}
+    \resumeItem{\textbf{AI/Tooling}: Claude Code, LLM-driven automation, RAG pipelines, prompt engineering}
+    \resumeItem{\textbf{Practices}: Design-doc-driven delivery, security review, release management, open-source maintenance}
+\end{itemize}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {BMSIT, Bangalore}{}
+      {Bachelor of Technology, Computer Science}{2018 -- 2022}
+  \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}

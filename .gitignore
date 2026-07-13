@@ -1,0 +1,14 @@
+# LaTeX aux files
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# Compiled PDFs (tracked explicitly per variant)
+# Uncomment the line below to exclude all PDFs
+# *.pdf
