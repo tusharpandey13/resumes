@@ -17,6 +17,7 @@ A Markdown-to-PDF resume system with AI-assisted tailoring for job applications.
 | distributed-backend-004 | Distributed Backend / Platform | [PDF Link](dist/distributed-backend-004/Tushar-Pandey-resume.pdf) |
 | distributed-backend-005 | Distributed Backend / Platform | [PDF Link](dist/distributed-backend-005/Tushar-Pandey-resume.pdf) |
 | distributed-backend-006 | Distributed Backend / Fintech  | [PDF Link](dist/distributed-backend-006/Tushar-Pandey-resume.pdf) |
+| distributed-backend-007 | Distributed Backend / Data Infra | [PDF Link](dist/distributed-backend-007/Tushar-Pandey-resume.pdf) |
 
 ---
 
