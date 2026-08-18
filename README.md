@@ -16,6 +16,7 @@ A Markdown-to-PDF resume system with AI-assisted tailoring for job applications.
 | fullstack-002 | Fullstack / Product Eng | [PDF Link](dist/fullstack-002/Tushar-Pandey-resume.pdf) |
 | distributed-backend-004 | Distributed Backend / Platform | [PDF Link](dist/distributed-backend-004/Tushar-Pandey-resume.pdf) |
 | distributed-backend-005 | Distributed Backend / Platform | [PDF Link](dist/distributed-backend-005/Tushar-Pandey-resume.pdf) |
+| distributed-backend-006 | Distributed Backend / Fintech  | [PDF Link](dist/distributed-backend-006/Tushar-Pandey-resume.pdf) |
 
 ---
 
