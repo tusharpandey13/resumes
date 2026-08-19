@@ -77,12 +77,44 @@ dist/<role-type>-<NNN>/Tushar-Pandey-resume.pdf            # published output
 
 ## APPLICATIONS.md — Local Index
 
-`APPLICATIONS.md` is gitignored. It maps dist IDs to companies and tracks status:
+`APPLICATIONS.md` is gitignored. It maps dist IDs to companies and tracks status across all 9 fields:
 
 ```
-distributed-backend-001 | distributed-backend | Notion  | SWE Infrastructure | applied | 2026-07-13
-auth-identity-001       | auth-identity       | Stripe  | SWE Auth           | pending | 2026-07-15
+ID | role-type | Company | Role Title | Status | Date | URL | Contact | Notes
 ```
+
+Example rows:
+
+```
+distributed-backend-001 | distributed-backend | Notion  | SWE Infrastructure | applied | 2026-07-13 | https://notion.so/jobs/123 | Jane Smith | infra tooling, Rust focus
+auth-identity-001       | auth-identity       | Stripe  | SWE Auth           | pending | 2026-07-15 | -                          | -          | -
+```
+
+**Field semantics:**
+
+| Field       | Description                                              | Empty value |
+|-------------|----------------------------------------------------------|-------------|
+| `ID`        | `<role-type>-<NNN>` — matches `dist/` folder name       | —           |
+| `role-type` | Role-type slug (see Folder & File Conventions above)     | —           |
+| `Company`   | Company display name                                     | —           |
+| `Role Title`| Exact role title from JD                                 | —           |
+| `Status`    | One of 7 lifecycle values (see below)                    | —           |
+| `Date`      | Date row was created (`YYYY-MM-DD`)                      | —           |
+| `URL`       | Job posting URL if available                             | `-`         |
+| `Contact`   | Recruiter or HM name/handle if known                     | `-`         |
+| `Notes`     | 1-line context summary from analysis.md                  | `-`         |
+
+**Status values:**
+
+| Status         | Meaning                                          |
+|----------------|--------------------------------------------------|
+| `pending`      | Resume generated; not yet submitted              |
+| `applied`      | Application submitted                            |
+| `screening`    | Initial screen scheduled or in progress          |
+| `interviewing` | Full interview loop underway                     |
+| `offer`        | Offer received                                   |
+| `rejected`     | Rejected at any stage                            |
+| `withdrawn`    | Application withdrawn voluntarily                |
 
 ---
 

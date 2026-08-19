@@ -151,3 +151,178 @@ Paragraph text here.
 - Always update `README.md` variants table and `APPLICATIONS.md` before committing
 - Source of truth for content: `src/resume.md` (and `base/Tushar-Pandey-resume.md` for extra detail)
 - Source of truth for styling: `templates/resume-template.tex` + `filters/resume.lua`
+
+## Application Data Model
+
+### Per-Application Folder Structure
+
+Each application lives under `applications/<role-type>/<company-slug>/` with the following files:
+
+```
+applications/<role-type>/<company-slug>/
+├── jd.md                     # raw JD verbatim — paste exactly as received
+├── analysis.md               # structured analysis (see sections below)
+├── resume.md                 # tailored resume (Pandoc Markdown source)
+├── Tushar-Pandey-resume.pdf  # compiled PDF (copied from dist/)
+├── comms/
+│   ├── linkedin-connection.md  # generated LinkedIn connection note
+│   ├── referral-ask.md         # generated referral request message
+│   ├── follow-up-apply.md      # generated post-apply follow-up
+│   └── hiring-manager.md       # generated cold HM outreach
+└── timeline.md               # append-only event log (markdown table)
+```
+
+### analysis.md Internal Structure
+
+`analysis.md` contains five sections in this order:
+
+1. **Role Summary** — 2–3 sentences: role title, team context, seniority, primary focus
+2. **Key Requirements** — bulleted list of must-have skills and experiences from JD
+3. **Skill Gaps** — explicit gaps between JD requirements and base resume; include mitigation notes
+4. **Company Context** — stage, product, 1–2 sentence context derived from JD or public knowledge in base/; no invented facts
+5. **Intake Notes** — free-form notes from initial processing: edge cases, tailoring decisions, anything worth referencing later
+
+### timeline.md Format
+
+`timeline.md` is an append-only markdown table. New rows are always added at the bottom. Never delete or edit existing rows.
+
+```markdown
+| Date       | Event       | Notes                                              |
+|------------|-------------|----------------------------------------------------|
+| YYYY-MM-DD | <event-type>| <free-form notes>                                  |
+```
+
+Event types: `intake`, `applied`, `recruiter-reply`, `screen-scheduled`, `follow-up-sent`, `rejection`, `offer`, `withdrawn`, `other`.
+
+### Status Vocabulary
+
+Use exactly these values in the `Status` field of `APPLICATIONS.md`:
+
+| Status         | Meaning                                          |
+|----------------|--------------------------------------------------|
+| `pending`      | Resume generated; not yet submitted              |
+| `applied`      | Application submitted                            |
+| `screening`    | Initial screen scheduled or in progress          |
+| `interviewing` | Full interview loop underway                     |
+| `offer`        | Offer received                                   |
+| `rejected`     | Rejected at any stage                            |
+| `withdrawn`    | Application withdrawn voluntarily                |
+
+### APPLICATIONS.md 9-Field Schema
+
+```
+ID | role-type | Company | Role Title | Status | Date | URL | Contact | Notes
+```
+
+| Field       | Description                                              | Empty value |
+|-------------|----------------------------------------------------------|-------------|
+| `ID`        | `<role-type>-<NNN>` — matches dist/ folder name         | —           |
+| `role-type` | Role-type slug (see CONTRIBUTING.md for canonical list)  | —           |
+| `Company`   | Company display name                                     | —           |
+| `Role Title`| Exact role title from JD                                 | —           |
+| `Status`    | One of the 7 status values above                         | —           |
+| `Date`      | Date row was created (`YYYY-MM-DD`)                      | —           |
+| `URL`       | Job posting URL if available                             | `-`         |
+| `Contact`   | Recruiter or HM name/handle if known                     | `-`         |
+| `Notes`     | 1-line context summary from analysis.md                  | `-`         |
+
+## Intake Workflow
+
+**Trigger:** user pastes a job description (JD).
+
+Work through these 9 steps in order. Do not skip steps.
+
+1. **Parse JD** — extract: role title, company name, tech stack, key requirements, seniority level, team context. Store these in memory for steps below.
+
+2. **Research company context** — from JD text and any context inferable from `base/Tushar-Pandey-resume.md`, determine: company stage, product, 1–2 sentence summary. Do not invent facts. If unknown, write "unknown" in Company Context.
+
+3. **Gap analysis** — compare JD key requirements against `base/Tushar-Pandey-resume.md`. List explicit gaps (skills or experiences present in JD but absent or weak in base). For each gap, note a mitigation (adjacent skill, transferable experience, or honest omission).
+
+4. **Write `jd.md`** — create `applications/<role-type>/<company-slug>/jd.md` with the verbatim JD text, no edits.
+
+5. **Write `analysis.md`** — create `applications/<role-type>/<company-slug>/analysis.md` with these 5 sections using data from steps 1–3:
+   - `## Role Summary`
+   - `## Key Requirements`
+   - `## Skill Gaps`
+   - `## Company Context`
+   - `## Intake Notes`
+
+6. **Run tailoring workflow** — execute `## Tailoring Workflow` steps 1–9 in full: determine role-type slug, company slug, dist ID; create resume.md; compile; update dist/; update README.md; update APPLICATIONS.md (6-field row at this stage); commit and push.
+
+7. **Generate 4 comms** — using templates in `templates/comms/`, fill all `{{variable}}` placeholders with values derived from analysis.md and JD. Write the 4 filled messages to `applications/<role-type>/<company-slug>/comms/`:
+   - `linkedin-connection.md` — fill `{{company}}`, `{{role}}`, `{{shared_context}}`
+   - `referral-ask.md` — fill `{{company}}`, `{{role}}`, `{{contact_name}}` (use `-` if unknown), `{{mutual_connection}}` (use `-` if none), `{{shared_context}}`
+   - `follow-up-apply.md` — fill `{{company}}`, `{{role}}`, `{{contact_name}}` (use `there` if unknown), `{{applied_date}}`, `{{shared_context}}`
+   - `hiring-manager.md` — fill `{{company}}`, `{{role}}`, `{{contact_name}}` (use `-` if unknown), `{{shared_context}}`, `{{why_them}}`
+
+8. **Write `timeline.md`** — create `applications/<role-type>/<company-slug>/timeline.md` with header row and first entry:
+   ```markdown
+   | Date       | Event  | Notes                                                        |
+   |------------|--------|--------------------------------------------------------------|
+   | YYYY-MM-DD | intake | JD pasted, analysis run, resume generated, comms drafted     |
+   ```
+
+9. **Update `APPLICATIONS.md` row** — extend the row written in step 6 to include the 3 new fields:
+   - `URL`: job posting URL from JD if present, otherwise `-`
+   - `Contact`: recruiter or HM name/handle if identifiable from JD, otherwise `-`
+   - `Notes`: 1-line context summary from `analysis.md` Company Context
+
+**Output to user** — after all 9 steps, return:
+
+- Brief summary of gap analysis (key gaps found, mitigations noted)
+- Confirmation list of all artifacts created (jd.md, analysis.md, resume.md, PDF, comms/, timeline.md)
+- All 4 comm texts formatted for copy-paste, in this order:
+  1. LinkedIn connection note
+  2. Referral ask
+  3. Post-apply follow-up
+  4. Hiring manager outreach
+
+## Query Interface
+
+**Trigger:** user provides natural-language event context about a specific company, e.g.:
+- "got a reply from the recruiter at Notion"
+- "heard back from hiring manager at Stripe, moving to phone screen"
+- "no response from Cartesia after 2 weeks"
+
+Work through these 8 steps in order.
+
+1. **Parse company name** — extract company name from user's message. Normalize to match the `Company` column in `APPLICATIONS.md` (case-insensitive, strip punctuation).
+
+2. **Look up in APPLICATIONS.md** — find the row where `Company` matches. Extract: `ID`, `role-type`, current `Status`, `Date`. Derive `company-slug` by listing `applications/<role-type>/` and matching the folder name to the company.
+
+3. **Load application artifacts** — read all of the following in parallel:
+   - `applications/<role-type>/<company-slug>/analysis.md`
+   - `applications/<role-type>/<company-slug>/timeline.md`
+   - `applications/<role-type>/<company-slug>/comms/linkedin-connection.md`
+   - `applications/<role-type>/<company-slug>/comms/referral-ask.md`
+   - `applications/<role-type>/<company-slug>/comms/follow-up-apply.md`
+   - `applications/<role-type>/<company-slug>/comms/hiring-manager.md`
+   - Current `APPLICATIONS.md` row for status
+
+4. **Determine event type** — classify the user's event into one of these types: `recruiter-reply`, `screen-scheduled`, `no-response-7d`, `no-response-14d`, `rejection`, `offer`, `other`.
+
+5. **Map event → next action** — use this decision table:
+
+   | Event                | Next Action                                     | Artifact                      |
+   |----------------------|-------------------------------------------------|-------------------------------|
+   | `recruiter-reply`    | Reply promptly; ask for screen slot             | `follow-up-apply.md` (adapt)  |
+   | `screen-scheduled`   | Prep: re-read analysis.md, review gaps          | `analysis.md`                 |
+   | `no-response-7d`     | Send follow-up                                  | `follow-up-apply.md`          |
+   | `no-response-14d`    | Send HM outreach                                | `hiring-manager.md`           |
+   | `rejection`          | Note in timeline; no action required            | —                             |
+   | `offer`              | Update status to `offer` in APPLICATIONS.md     | —                             |
+
+6. **Append to `timeline.md`** — add a new row at the bottom of the table in `applications/<role-type>/<company-slug>/timeline.md`:
+   ```markdown
+   | YYYY-MM-DD | <event-type> | <user-provided notes or brief summary> |
+   ```
+
+7. **Update `APPLICATIONS.md` status** — if the event changes status (e.g. `recruiter-reply` → `screening`, `offer` → `offer`, `rejection` → `rejected`), update the `Status` field for this row. If status is unchanged, skip this step.
+
+8. **Return to user:**
+   - Current status (from `APPLICATIONS.md` after any update)
+   - Recommended next step (one sentence from decision table)
+   - Relevant artifact text — if the decision table maps to an artifact, return the filled message text adapted for the current context, ready to copy-paste
+   - Timeline so far — the full contents of `timeline.md` for this application
+
+**Edge case — company not found:** if no row in `APPLICATIONS.md` matches the parsed company name, do not guess. Respond: "No application found for `<company-name>`. Run the Intake Workflow first, or provide the role-type and company-slug to locate the folder manually."
