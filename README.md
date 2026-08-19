@@ -21,6 +21,7 @@ A Markdown-to-PDF resume system with AI-assisted tailoring for job applications.
 | distributed-backend-008 | Distributed Backend / Fintech    | [PDF Link](dist/distributed-backend-008/Tushar-Pandey-resume.pdf) |
 | distributed-backend-009 | Distributed Backend / SaaS Infra | [PDF Link](dist/distributed-backend-009/Tushar-Pandey-resume.pdf) |
 | distributed-backend-010 | Distributed Backend / DevSecOps  | [PDF Link](dist/distributed-backend-010/Tushar-Pandey-resume.pdf) |
+| auth-identity-001       | Auth & Identity                  | [PDF Link](dist/auth-identity-001/Tushar-Pandey-resume.pdf) |
 
 ---
 
